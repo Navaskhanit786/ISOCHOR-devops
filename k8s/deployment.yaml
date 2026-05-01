@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: isochor-devops
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: isochor-devops
+  template:
+    metadata:
+      labels:
+        app: isochor-devops
+    spec:
+      containers:
+        - name: isochor-devops
+          image: nginx:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: EXAMPLE_SERVICE_URL
+              value: "http://example-service:8080"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-service
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: example-service
+  template:
+    metadata:
+      labels:
+        app: example-service
+    spec:
+      containers:
+        - name: example-service
+          image: nginx:latest
